@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between items-center p-2">
+  <header class="flex justify-between items-center p-2 bg-white">
     <h1 class="text-4xl font-bold text-primary">Revium</h1>
     <div class="dropdown dropdown-end">
       <label tabindex="0" class="btn btn-ghost m-1">三</label>
