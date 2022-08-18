@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from "nuxt";
+const { API_KEY } = process.env;
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
@@ -13,18 +14,20 @@ export default defineNuxtConfig({
       },
     },
   },
-  meta: {                      // !!Nuxt3からheadになったので注意！！！
+  meta: {
+    // !!Nuxt3からheadになったので注意！！！
     htmlAttrs: {
-      lang: 'ja',
-      'data-theme': "cupcake"  // テーマを選択
+      lang: "ja",
+      "data-theme": "cupcake", // テーマを選択
     },
-    title: 'Revium',
+    title: "Revium",
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
-  }
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+  },
+  publicRuntimeConfig: {
+    apiKey: API_KEY,
+  },
 });

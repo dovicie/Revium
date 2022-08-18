@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import IndexMap from "../components/IndexMap.vue";
 
 const place = ref("");
 const keyword = ref("");
@@ -21,11 +22,7 @@ const searchPlace = () => {
 <template>
   <div class="p-2 flex flex-col gap-y-4">
     <div>
-      <img
-        src="https://www.axis-corp.com/blog/wp-content/uploads/2016/01/ee6470d628534090ef9a7eca7858aa53.png"
-        alt=""
-        class="object-cover w-full"
-      />
+      <IndexMap />
     </div>
 
     <form class="flex flex-col gap-y-4" @submit.prevent="searchPlace">
