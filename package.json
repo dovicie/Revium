@@ -7,12 +7,14 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.50.0",
     "autoprefixer": "^10.4.8",
     "nuxt": "3.0.0-rc.6",
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.8"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.14.3",
     "daisyui": "^2.22.0",
     "vue3-google-map": "^0.13.2"
   }

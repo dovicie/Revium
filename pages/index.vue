@@ -8,6 +8,10 @@ const radius = ref("200m");
 const isOpen = ref(true);
 const genre = ref();
 
+const latlng = ref("");
+const address = ref("");
+const address_list = ref([]);
+
 const searchPlace = () => {
   console.log(
     place.value,
