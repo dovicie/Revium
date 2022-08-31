@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import IndexMap from "../components/IndexMap.vue";
+import { Loader } from "@googlemaps/js-api-loader";
+const ctx = useRuntimeConfig();
 
 const place = ref("");
 const keyword = ref("");
@@ -8,9 +10,71 @@ const radius = ref("200m");
 const isOpen = ref(true);
 const genre = ref();
 
-const latlng = ref("");
-const address = ref("");
-const address_list = ref([]);
+const gmap = ref();
+
+const lat = ref(34.6);
+const lng = ref(135.52);
+
+const loader = new Loader({
+  apiKey: ctx.apiKey,
+  version: "weekly",
+  libraries: ["places"],
+});
+
+// onMounted(() => {
+//   loader
+//     .load()
+//     .then((google) => {
+//       var geocoder = new google.maps.Geocoder();
+//       geocoder.geocode(
+//         {
+//           address: place.value,
+//         },
+//         function (results, status) {
+//           if (status == google.maps.GeocoderStatus.OK) {
+//             //取得した緯度・経度を使って周辺検索
+//             var location = results[0].geometry.location;
+//             lat.value = location.lat();
+//             lng.value = location.lng();
+//             console.log(lat.value, lng.value);
+//           } else {
+//             console.log("位置情報が取得できませんでした。");
+//           }
+//         }
+//       );
+//     })
+//     .catch((e) => {
+//       // do something
+//     });
+// });
+
+const geocoding = () => {
+  console.log("geo");
+  loader
+    .load()
+    .then((google) => {
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode(
+        {
+          address: place.value,
+        },
+        function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            //取得した緯度・経度を使って周辺検索
+            var location = results[0].geometry.location;
+            lat.value = location.lat();
+            lng.value = location.lng();
+            console.log(lat.value, lng.value);
+          } else {
+            console.log("位置情報が取得できませんでした。");
+          }
+        }
+      );
+    })
+    .catch((e) => {
+      // do something
+    });
+};
 
 const searchPlace = () => {
   console.log(
@@ -26,10 +90,10 @@ const searchPlace = () => {
 <template>
   <div class="p-2 flex flex-col gap-y-4">
     <div>
-      <IndexMap />
+      <IndexMap :lat="lat" :lng="lng" />
     </div>
 
-    <form class="flex flex-col gap-y-4" @submit.prevent="searchPlace">
+    <form class="flex flex-col gap-y-4" @submit.prevent="geocoding">
       <div>
         <label class="h2">🗻 場所</label>
         <div class="flex flex-col sm:flex-row gap-y-2">
@@ -89,7 +153,7 @@ const searchPlace = () => {
           <span class="label-text font-bold">営業中のスポットのみを表示</span>
         </label>
       </div>
-      <button class="btn btn-secondary" @click="searchPlace()" type="submit">
+      <button class="btn btn-secondary" type="submit">
         🔎 この条件で探す
       </button>
     </form>
