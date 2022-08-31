@@ -12,8 +12,8 @@ const genre = ref();
 
 const gmap = ref();
 
-const lat = ref(34.6);
-const lng = ref(135.52);
+const lat = ref(35.689634);
+const lng = ref(139.692101);
 
 const loader = new Loader({
   apiKey: ctx.apiKey,

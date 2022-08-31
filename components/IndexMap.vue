@@ -15,7 +15,7 @@ onMounted(() => {
       lat: +props.lat,
       lng: +props.lng,
     },
-    zoom: 15,
+    zoom: 14,
   };
 
   const loader = new Loader({
