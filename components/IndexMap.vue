@@ -28,6 +28,27 @@ onMounted(() => {
     .load()
     .then((google) => {
       const map = new google.maps.Map(gmap.value, mapOptions);
+
+      const sydney = new google.maps.LatLng(35.7, 139.7);
+      const infowindow = new google.maps.InfoWindow();
+
+      const request = {
+        location: sydney,
+        radius: 800,
+        type: ["restaurant"],
+        keyword: "焼き肉",
+        language: "ja",
+      };
+      const service = new google.maps.places.PlacesService(map);
+      service.nearbySearch(request, function (results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            console.log(results[i]);
+            // createMarker(results[i]);
+          }
+          // map.setCenter(results[0].geometry.location);
+        }
+      });
     })
     .catch((e) => {
       // do something

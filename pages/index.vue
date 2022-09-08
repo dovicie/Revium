@@ -6,14 +6,28 @@ const ctx = useRuntimeConfig();
 
 const place = ref("");
 const keyword = ref("");
-const radius = ref("200m");
+const radius = ref(200);
 const isOpen = ref(true);
-const genre = ref();
+const genre = ref([]);
+const genreList = ref([
+  {
+    label: "レストラン",
+    value: "restaurant",
+  },
+  {
+    label: "コーヒー",
+    value: "cafe",
+  },
+  {
+    label: "公園",
+    value: "park",
+  },
+]);
 
 const gmap = ref();
 
-const lat = ref(35.689634);
-const lng = ref(139.692101);
+const lat = ref(35.7062);
+const lng = ref(139.6837);
 
 const loader = new Loader({
   apiKey: ctx.apiKey,
@@ -21,27 +35,34 @@ const loader = new Loader({
   libraries: ["places"],
 });
 
-// onMounted(() => {
+onMounted(() => {
+  loader
+    .load()
+    .then((google) => {
+      var map = new google.maps.Map(gmap.value, {
+        center: {
+          lat: lat.value,
+          lng: lng.value,
+        },
+        zoom: 14,
+      });
+    })
+    .catch((e) => {
+      // do something
+    });
+});
+
+// onUpdated(() => {
 //   loader
 //     .load()
 //     .then((google) => {
-//       var geocoder = new google.maps.Geocoder();
-//       geocoder.geocode(
-//         {
-//           address: place.value,
+//       var map = new google.maps.Map(gmap.value, {
+//         center: {
+//           lat: lat.value,
+//           lng: lng.value,
 //         },
-//         function (results, status) {
-//           if (status == google.maps.GeocoderStatus.OK) {
-//             //取得した緯度・経度を使って周辺検索
-//             var location = results[0].geometry.location;
-//             lat.value = location.lat();
-//             lng.value = location.lng();
-//             console.log(lat.value, lng.value);
-//           } else {
-//             console.log("位置情報が取得できませんでした。");
-//           }
-//         }
-//       );
+//         zoom: 14,
+//       });
 //     })
 //     .catch((e) => {
 //       // do something
@@ -49,7 +70,6 @@ const loader = new Loader({
 // });
 
 const geocoding = () => {
-  console.log("geo");
   loader
     .load()
     .then((google) => {
@@ -64,7 +84,6 @@ const geocoding = () => {
             var location = results[0].geometry.location;
             lat.value = location.lat();
             lng.value = location.lng();
-            console.log(lat.value, lng.value);
           } else {
             console.log("位置情報が取得できませんでした。");
           }
@@ -77,23 +96,45 @@ const geocoding = () => {
 };
 
 const searchPlace = () => {
-  console.log(
-    place.value,
-    keyword.value,
-    radius.value,
-    genre.value,
-    isOpen.value
-  );
+  loader.load().then((google) => {
+    const latLng = new google.maps.LatLng(lat.value, lng.value);
+    var map = new google.maps.Map(gmap.value, {
+      center: {
+        lat: lat.value,
+        lng: lng.value,
+      },
+      zoom: 14,
+    });
+
+    const request = {
+      location: latLng,
+      radius: radius.value,
+      type: genre.value,
+      keyword: keyword.value,
+      language: "ja",
+    };
+    const service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, function (results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          console.log(results[i]);
+          // createMarker(results[i]);
+        }
+        // map.setCenter(results[0].geometry.location);
+      }
+    });
+  });
 };
 </script>
 
 <template>
   <div class="p-2 flex flex-col gap-y-4">
     <div>
-      <IndexMap :lat="lat" :lng="lng" />
+      <!-- <IndexMap :lat="lat" :lng="lng" /> -->
+      <div ref="gmap" class="h-[240px] w-full"></div>
     </div>
 
-    <form class="flex flex-col gap-y-4" @submit.prevent="geocoding">
+    <form class="flex flex-col gap-y-4" @submit.prevent="searchPlace">
       <div>
         <label class="h2">🗻 場所</label>
         <div class="flex flex-col sm:flex-row gap-y-2">
@@ -106,13 +147,13 @@ const searchPlace = () => {
           <div class="flex flex-row items-center justify-end gap-1">
             <p class="shrink-0">から</p>
             <select v-model="radius" class="select select-bordered select-sm">
-              <option>200m</option>
-              <option>500m</option>
-              <option>800m</option>
-              <option>1km</option>
-              <option>3km</option>
-              <option>5km</option>
-              <option>10km</option>
+              <option value="200">200m</option>
+              <option value="500">500m</option>
+              <option value="800">800m</option>
+              <option value="1000">1km</option>
+              <option value="3000">3km</option>
+              <option value="5000">5km</option>
+              <option value="10000">10km</option>
             </select>
             <p class="shrink-0">圏内</p>
           </div>
@@ -129,7 +170,7 @@ const searchPlace = () => {
       </div>
       <div>
         <label class="h2">🎯 ジャンル</label>
-        <ul class="flex flex-wrap gap-2">
+        <!-- <ul class="flex flex-wrap gap-2">
           <li class="genre-btn">レストラン</li>
           <li class="genre-btn">コーヒー</li>
           <li class="genre-btn">観光スポット</li>
@@ -139,13 +180,18 @@ const searchPlace = () => {
           <li class="genre-btn">居酒屋</li>
           <li class="genre-btn">ホテル</li>
           <li class="genre-btn">バー</li>
-        </ul>
-        <!-- <input type="checkbox" id="jack" value="Jack" v-model="genre" />
-        <label for="jack">Jack</label>
-        <input type="checkbox" id="john" value="John" v-model="checkedNames" />
-        <label for="john">John</label>
-        <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
-        <label for="mike">Mike</label> -->
+        </ul> -->
+        <div class="flex flex-wrap gap-2">
+          <div v-for="genreItem in genreList" :key="genreItem">
+            <input
+              type="checkbox"
+              :id="genreItem.value"
+              :value="genreItem.value"
+              v-model="genre"
+            />
+            <label :for="genreItem.value">{{ genreItem.label }}</label>
+          </div>
+        </div>
       </div>
       <div class="form-control">
         <label class="label cursor-pointer justify-center gap-2">
@@ -153,9 +199,7 @@ const searchPlace = () => {
           <span class="label-text font-bold">営業中のスポットのみを表示</span>
         </label>
       </div>
-      <button class="btn btn-secondary" type="submit">
-        🔎 この条件で探す
-      </button>
+      <button class="btn btn-secondary" type="submit">🔎 この条件で探す</button>
     </form>
   </div>
 </template>
