@@ -11,16 +11,36 @@ const isOpen = ref(true);
 const genre = ref([]);
 const genreList = ref([
   {
+    label: "飲食店",
+    value: "food",
+  },
+  {
+    label: "観光地",
+    value: "tourist_attraction",
+  },
+  {
     label: "レストラン",
     value: "restaurant",
   },
   {
-    label: "コーヒー",
+    label: "カフェ",
     value: "cafe",
   },
   {
     label: "公園",
     value: "park",
+  },
+  {
+    label: "ショッピングモール",
+    value: "shopping_mall",
+  },
+  {
+    label: "バー",
+    value: "bar",
+  },
+  {
+    label: "宿泊施設",
+    value: "lodging",
   },
 ]);
 
