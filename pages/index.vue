@@ -49,6 +49,13 @@ const gmap = ref();
 const lat = ref(35.7062);
 const lng = ref(139.6837);
 
+const placeList = ref([]);
+const sortedPlaceList = ref(
+  placeList.value.sort((a, b) => {
+    a.user_ratings_total < b.user_ratings_total ? -1 : 1;
+  })
+);
+
 const loader = new Loader({
   apiKey: ctx.apiKey,
   version: "weekly",
@@ -110,6 +117,7 @@ const getPlaces = async () => {
     const service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, function (results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
+        placeList.value = results;
         for (var i = 0; i < results.length; i++) {
           console.log(results[i]);
           // createMarker(results[i]);
@@ -189,5 +197,26 @@ const getPlaces = async () => {
       </div>
       <button class="btn btn-secondary" type="submit">🔎 この条件で探す</button>
     </form>
+    <div class="flex flex-col flex-wrap gap-y-2">
+      <div v-for="place in placeList" :key="place" class="p-2 gap-y-2 bg-white">
+        <div class="flex items-center gap-x-2">
+          <p class="font-bold">
+            <span class="text-xl text-secondary">{{
+              place.user_ratings_total || 0
+            }}</span>
+            件
+          </p>
+          <p class="text-xs" v-if="place.rating">
+            <span class="text-accent">★</span>{{ place.rating }}
+          </p>
+        </div>
+        <p class="font-bold text-2xl">{{ place.name }}</p>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <div v-for="typ in place.types" :key="typ">
+            {{ typ }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
