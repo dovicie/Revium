@@ -6,7 +6,13 @@
   .h2 {
     @apply font-bold text-base;
   }
+  .genre-checkbox {
+    @apply hidden;
+  }
   .genre-btn {
-    @apply btn btn-primary btn-xs btn-active;
+    @apply btn btn-outline btn-primary btn-xs;
+  }
+  .genre-checkbox:checked + .genre-btn {
+    @apply btn btn-primary btn-xs;
   }
 }

@@ -72,23 +72,6 @@ onMounted(() => {
     });
 });
 
-// onUpdated(() => {
-//   loader
-//     .load()
-//     .then((google) => {
-//       var map = new google.maps.Map(gmap.value, {
-//         center: {
-//           lat: lat.value,
-//           lng: lng.value,
-//         },
-//         zoom: 14,
-//       });
-//     })
-//     .catch((e) => {
-//       // do something
-//     });
-// });
-
 const geocoding = () => {
   loader
     .load()
@@ -190,17 +173,6 @@ const searchPlace = () => {
       </div>
       <div>
         <label class="h2">🎯 ジャンル</label>
-        <!-- <ul class="flex flex-wrap gap-2">
-          <li class="genre-btn">レストラン</li>
-          <li class="genre-btn">コーヒー</li>
-          <li class="genre-btn">観光スポット</li>
-          <li class="genre-btn">公園</li>
-          <li class="genre-btn">ラーメン</li>
-          <li class="genre-btn">動物園</li>
-          <li class="genre-btn">居酒屋</li>
-          <li class="genre-btn">ホテル</li>
-          <li class="genre-btn">バー</li>
-        </ul> -->
         <div class="flex flex-wrap gap-2">
           <div v-for="genreItem in genreList" :key="genreItem">
             <input
@@ -208,8 +180,11 @@ const searchPlace = () => {
               :id="genreItem.value"
               :value="genreItem.value"
               v-model="genre"
+              class="genre-checkbox"
             />
-            <label :for="genreItem.value">{{ genreItem.label }}</label>
+            <label :for="genreItem.value" class="genre-btn">{{
+              genreItem.label
+            }}</label>
           </div>
         </div>
       </div>
