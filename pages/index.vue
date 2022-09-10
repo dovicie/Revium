@@ -4,11 +4,11 @@ import IndexMap from "../components/IndexMap.vue";
 import { Loader } from "@googlemaps/js-api-loader";
 const ctx = useRuntimeConfig();
 
-const place = ref("");
-const keyword = ref("");
-const radius = ref(200);
-const isOpen = ref(true);
-const genre = ref([]);
+const inputAddress = ref("");
+const inputKeyword = ref("");
+const inputRadius = ref(200);
+const inputIsOpen = ref(true);
+const inputGenre = ref([]);
 const genreList = ref([
   {
     label: "飲食店",
@@ -72,33 +72,24 @@ onMounted(() => {
     });
 });
 
-const geocoding = () => {
-  loader
-    .load()
-    .then((google) => {
-      var geocoder = new google.maps.Geocoder();
-      geocoder.geocode(
-        {
-          address: place.value,
-        },
-        function (results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            //取得した緯度・経度を使って周辺検索
-            var location = results[0].geometry.location;
-            lat.value = location.lat();
-            lng.value = location.lng();
-          } else {
-            console.log("位置情報が取得できませんでした。");
-          }
-        }
-      );
-    })
-    .catch((e) => {
-      // do something
+const getLocation = (address) => {
+  return new Promise((resolve, reject) => {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: address }, (results, status) => {
+      if (status === "OK") {
+        resolve(results[0].geometry.location);
+      } else {
+        reject(status);
+      }
     });
+  });
 };
 
-const searchPlace = () => {
+const getPlaces = async () => {
+  const location = await getLocation(inputAddress.value);
+  lat.value = location.lat();
+  lng.value = location.lng();
+
   loader.load().then((google) => {
     const latLng = new google.maps.LatLng(lat.value, lng.value);
     var map = new google.maps.Map(gmap.value, {
@@ -111,9 +102,9 @@ const searchPlace = () => {
 
     const request = {
       location: latLng,
-      radius: radius.value,
-      type: genre.value,
-      keyword: keyword.value,
+      radius: inputRadius.value,
+      type: inputGenre.value,
+      keyword: inputKeyword.value,
       language: "ja",
     };
     const service = new google.maps.places.PlacesService(map);
@@ -123,7 +114,7 @@ const searchPlace = () => {
           console.log(results[i]);
           // createMarker(results[i]);
         }
-        // map.setCenter(results[0].geometry.location);
+        map.setCenter(results[0].geometry.location);
       }
     });
   });
@@ -133,23 +124,25 @@ const searchPlace = () => {
 <template>
   <div class="p-2 flex flex-col gap-y-4">
     <div>
-      <!-- <IndexMap :lat="lat" :lng="lng" /> -->
       <div ref="gmap" class="h-[240px] w-full"></div>
     </div>
 
-    <form class="flex flex-col gap-y-4" @submit.prevent="searchPlace">
+    <form class="flex flex-col gap-y-4" @submit.prevent="getPlaces">
       <div>
         <label class="h2">🗻 場所</label>
         <div class="flex flex-col sm:flex-row gap-y-2">
           <input
-            v-model="place"
+            v-model="inputAddress"
             type="text"
             placeholder="新宿駅"
             class="input input-bordered input-sm grow"
           />
           <div class="flex flex-row items-center justify-end gap-1">
             <p class="shrink-0">から</p>
-            <select v-model="radius" class="select select-bordered select-sm">
+            <select
+              v-model="inputRadius"
+              class="select select-bordered select-sm"
+            >
               <option value="200">200m</option>
               <option value="500">500m</option>
               <option value="800">800m</option>
@@ -165,7 +158,7 @@ const searchPlace = () => {
       <div>
         <label class="h2">🀄 キーワード</label>
         <input
-          v-model="keyword"
+          v-model="inputKeyword"
           type="text"
           placeholder=""
           class="input input-bordered w-full input-sm"
@@ -179,7 +172,7 @@ const searchPlace = () => {
               type="checkbox"
               :id="genreItem.value"
               :value="genreItem.value"
-              v-model="genre"
+              v-model="inputGenre"
               class="genre-checkbox"
             />
             <label :for="genreItem.value" class="genre-btn">{{
@@ -190,7 +183,7 @@ const searchPlace = () => {
       </div>
       <div class="form-control">
         <label class="label cursor-pointer justify-center gap-2">
-          <input type="checkbox" class="checkbox" v-model="isOpen" />
+          <input type="checkbox" class="checkbox" v-model="inputIsOpen" />
           <span class="label-text font-bold">営業中のスポットのみを表示</span>
         </label>
       </div>
