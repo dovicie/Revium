@@ -37,7 +37,7 @@ onMounted(() => {
   loader
     .load()
     .then((google) => {
-      var map = new google.maps.Map(gmap.value, {
+      const map = new google.maps.Map(gmap.value, {
         center: {
           lat: lat.value,
           lng: lng.value,
@@ -71,7 +71,7 @@ const getPlaces = async () => {
 
   loader.load().then((google) => {
     const latLng = new google.maps.LatLng(lat.value, lng.value);
-    var map = new google.maps.Map(gmap.value, {
+    const map = new google.maps.Map(gmap.value, {
       center: {
         lat: lat.value,
         lng: lng.value,
@@ -90,7 +90,7 @@ const getPlaces = async () => {
     service.nearbySearch(request, function (results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         placeList.value = results;
-        for (var i = 0; i < results.length; i++) {
+        for (let i = 0; i < results.length; i++) {
           console.log(results[i]);
         }
       }
