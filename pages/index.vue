@@ -1,46 +1,15 @@
 <script setup>
 import { ref } from "vue";
-import IndexMap from "../components/IndexMap.vue";
-import SearchItem from "~~/components/SearchItem.vue";
+import SearchForm from "~~/components/SearchForm.vue";
 import SearchResult from "~~/components/SearchResult.vue";
 import { Loader } from "@googlemaps/js-api-loader";
 const ctx = useRuntimeConfig();
 
-const inputAddress = ref("");
-const inputKeyword = ref("");
-const inputRadius = ref(200);
-const inputIsOpen = ref(true);
-const inputGenre = ref([]);
-const genreList = ref([
-  {
-    label: "レストラン",
-    value: "restaurant",
-  },
-  {
-    label: "観光地",
-    value: "tourist_attraction",
-  },
-  {
-    label: "カフェ",
-    value: "cafe",
-  },
-  {
-    label: "ショッピングモール",
-    value: "shopping_mall",
-  },
-  {
-    label: "公園",
-    value: "park",
-  },
-  {
-    label: "バー",
-    value: "bar",
-  },
-  {
-    label: "宿泊施設",
-    value: "lodging",
-  },
-]);
+const queryAddress = ref("");
+const queryKeyword = ref("");
+const queryRadius = ref(800);
+const queryIsOpen = ref(false);
+const queryGenres = ref([]);
 
 const gmap = ref();
 
@@ -48,12 +17,6 @@ const lat = ref(35.7062);
 const lng = ref(139.6837);
 
 const placeList = ref([]);
-const sortedPlaceList = ref(
-  placeList.value.sort((a, b) => {
-    a.user_ratings_total < b.user_ratings_total ? -1 : 1;
-  })
-);
-
 const isVisibleSearchResult = ref(false);
 
 const openSearchResult = () => {
@@ -101,7 +64,8 @@ const getLocation = (address) => {
 };
 
 const getPlaces = async () => {
-  const location = await getLocation(inputAddress.value);
+  console.log(queryAddress.value);
+  const location = await getLocation(queryAddress.value);
   lat.value = location.lat();
   lng.value = location.lng();
 
@@ -117,9 +81,9 @@ const getPlaces = async () => {
 
     const request = {
       location: latLng,
-      radius: inputRadius.value,
-      type: inputGenre.value,
-      keyword: inputKeyword.value,
+      radius: queryRadius.value,
+      type: queryGenres.value,
+      keyword: queryKeyword.value,
       language: "ja",
     };
     const service = new google.maps.places.PlacesService(map);
@@ -142,7 +106,7 @@ const getPlaces = async () => {
       <div ref="gmap" class="h-[240px] w-full"></div>
     </div>
 
-    <form
+    <!-- <form
       v-if="!isVisibleSearchResult"
       class="flex flex-col gap-y-4"
       @submit.prevent="getPlaces"
@@ -207,9 +171,20 @@ const getPlaces = async () => {
         </label>
       </div>
       <button class="btn btn-secondary" type="submit">🔎 この条件で探す</button>
-    </form>
+    </form> -->
 
-    <div v-else class="">
+    <div v-if="!isVisibleSearchResult">
+      <SearchForm
+        @getPlaces="getPlaces"
+        v-model:address="queryAddress"
+        v-model:radius="queryRadius"
+        v-model:keyword="queryKeyword"
+        v-model:genres="queryGenres"
+        v-model:isOpen="queryIsOpen"
+      />
+    </div>
+
+    <div v-else>
       <SearchResult :places="placeList" @close="closeSearchResult" />
     </div>
   </div>
