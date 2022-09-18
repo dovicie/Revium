@@ -13,8 +13,8 @@ const queryGenres = ref([]);
 
 const gmap = ref();
 
-const lat = ref(35.7062);
-const lng = ref(139.6837);
+const lat = ref(35.658106);
+const lng = ref(139.741364);
 
 const placeList = ref([]);
 const isVisibleSearchResult = ref(false);
@@ -64,7 +64,6 @@ const getLocation = (address) => {
 };
 
 const getPlaces = async () => {
-  console.log(queryAddress.value);
   const location = await getLocation(queryAddress.value);
   lat.value = location.lat();
   lng.value = location.lng();
