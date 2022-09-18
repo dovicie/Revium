@@ -11,28 +11,24 @@ const inputIsOpen = ref(true);
 const inputGenre = ref([]);
 const genreList = ref([
   {
-    label: "飲食店",
-    value: "food",
+    label: "レストラン",
+    value: "restaurant",
   },
   {
     label: "観光地",
     value: "tourist_attraction",
   },
   {
-    label: "レストラン",
-    value: "restaurant",
-  },
-  {
     label: "カフェ",
     value: "cafe",
   },
   {
-    label: "公園",
-    value: "park",
-  },
-  {
     label: "ショッピングモール",
     value: "shopping_mall",
+  },
+  {
+    label: "公園",
+    value: "park",
   },
   {
     label: "バー",
@@ -120,9 +116,7 @@ const getPlaces = async () => {
         placeList.value = results;
         for (var i = 0; i < results.length; i++) {
           console.log(results[i]);
-          // createMarker(results[i]);
         }
-        map.setCenter(results[0].geometry.location);
       }
     });
   });
@@ -198,7 +192,8 @@ const getPlaces = async () => {
       <button class="btn btn-secondary" type="submit">🔎 この条件で探す</button>
     </form>
     <div class="flex flex-col flex-wrap gap-y-2">
-      <div v-for="place in placeList" :key="place" class="p-2 gap-y-2 bg-white">
+      <div v-for="place in placeList" :key="place" class="p-2 flex flex-col gap-y-2 bg-white">
+        <img :src="place.photos[0].getUrl()" alt="" class="aspect-[4/3] object-cover">
         <div class="flex items-center gap-x-2">
           <p class="font-bold">
             <span class="text-xl text-secondary">{{
