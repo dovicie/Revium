@@ -1,18 +1,29 @@
+<script setup>
+const props = defineProps({
+  imgUrl: String,
+  ratingTotal: Number,
+  rating: Number,
+  name: String,
+  genres: Array,
+});
+</script>
+
 <template>
-  <div class="card card-compact w-full bg-white">
-    <figure>
-      <img src="https://placeimg.com/400/225/arch" alt="Shoes" />
-    </figure>
-    <div class="card-body">
-      <div class="flex flex-start items-center gap-2">
-        <div><span class="text-secondary text-xl font-bold">149</span>件</div>
-        <div class="badge badge-accent badge-outline">★ 4.4</div>
-      </div>
-      <h2 class="card-title">白糸の滝</h2>
-      <p>観光スポット･景勝地</p>
-      <div class="card-actions">
-        <div class="badge badge-success">🕛 営業中</div>
-        <p>24時間営業</p>
+  <div class="p-2 flex flex-col gap-y-2 bg-white">
+    <img :src="props.imgUrl" alt="" class="aspect-[4/3] object-cover" />
+    <div class="flex items-center gap-x-2">
+      <p class="font-bold">
+        <span class="text-xl text-secondary">{{ props.ratingTotal || 0 }}</span>
+        件
+      </p>
+      <p class="text-xs" v-if="props.rating">
+        <span class="text-accent">★</span>{{ props.rating }}
+      </p>
+    </div>
+    <p class="font-bold text-2xl">{{ props.name }}</p>
+    <div class="flex flex-wrap gap-2 text-xs">
+      <div v-for="genre in props.genres" :key="genre">
+        {{ genre }}
       </div>
     </div>
   </div>
