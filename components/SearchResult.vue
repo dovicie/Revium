@@ -4,12 +4,18 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
+
+const sortedPlaces = computed(() => {
+  return props.places.sort((a, b) => {
+    return b.user_ratings_total - a.user_ratings_total;
+  });
+});
 </script>
 
 <template>
   <div class="flex flex-col flex-wrap gap-y-2">
     <div
-      v-for="place in props.places"
+      v-for="place in sortedPlaces"
       :key="place"
       class="p-2 flex flex-col gap-y-2 bg-white"
     >

@@ -89,14 +89,14 @@ const getPlaces = async () => {
     service.nearbySearch(request, function (results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         var placesList = new Array().concat(results);
-        placesList.sort((a, b) => {
-          if (a.user_ratings_total > b.user_ratings_total) return -1;
-          if (a.user_ratings_total < b.user_ratings_total) return 1;
+        // placesList.sort((a, b) => {
+        //   if (a.user_ratings_total > b.user_ratings_total) return -1;
+        //   if (a.user_ratings_total < b.user_ratings_total) return 1;
 
-          if (a.rating > b.rating) return -1;
-          if (a.rating < b.rating) return 1;
-          return 0;
-        });
+        //   if (a.rating > b.rating) return -1;
+        //   if (a.rating < b.rating) return 1;
+        //   return 0;
+        // });
         placeList.value = placesList;
       }
     });
