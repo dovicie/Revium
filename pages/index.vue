@@ -91,7 +91,7 @@ const getPlaces = async () => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         placesList = placesList.concat(results);
         if (pagination.hasNextPage) {
-          setTimeout(pagination.nextPage(), 1);
+          pagination.nextPage();
         } else {
           placeList.value = placesList;
         }
