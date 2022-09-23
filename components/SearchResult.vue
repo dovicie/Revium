@@ -19,11 +19,13 @@ const sortedPlaces = computed(() => {
       :key="place"
       class="p-2 flex flex-col gap-y-2 bg-white"
     >
-      <img
-        :src="place.photos[0].getUrl()"
-        alt=""
-        class="aspect-[4/3] object-cover"
-      />
+      <div v-if="place.photos">
+        <img
+          :src="place.photos[0].getUrl()"
+          alt=""
+          class="aspect-[4/3] object-cover"
+        />
+      </div>
       <div class="flex items-center gap-x-2">
         <p class="font-bold">
           <span class="text-xl text-secondary">{{

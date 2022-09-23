@@ -85,19 +85,16 @@ const getPlaces = async () => {
       keyword: queryKeyword.value,
       language: "ja",
     };
+    let placesList = new Array();
     const service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, function (results, status) {
+    service.nearbySearch(request, (results, status, pagination) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        var placesList = new Array().concat(results);
-        // placesList.sort((a, b) => {
-        //   if (a.user_ratings_total > b.user_ratings_total) return -1;
-        //   if (a.user_ratings_total < b.user_ratings_total) return 1;
-
-        //   if (a.rating > b.rating) return -1;
-        //   if (a.rating < b.rating) return 1;
-        //   return 0;
-        // });
-        placeList.value = placesList;
+        placesList = placesList.concat(results);
+        if (pagination.hasNextPage) {
+          setTimeout(pagination.nextPage(), 1);
+        } else {
+          placeList.value = placesList;
+        }
       }
     });
   });
