@@ -63,6 +63,8 @@ const getLocation = (address) => {
   });
 };
 
+const isIncludes = (arr, target) => arr.some((el) => target.includes(el));
+
 const getPlaces = async () => {
   const location = await getLocation(queryAddress.value);
   lat.value = location.lat();
@@ -85,15 +87,24 @@ const getPlaces = async () => {
       keyword: queryKeyword.value,
       language: "ja",
     };
-    let placesList = new Array();
+
+    let searchResults = new Array();
     const service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, (results, status, pagination) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        placesList = placesList.concat(results);
+        searchResults = searchResults.concat(results);
         if (pagination.hasNextPage) {
           pagination.nextPage();
         } else {
-          placeList.value = placesList;
+          searchResults = searchResults.filter(
+            (place) => !place.types.includes("locality")
+          );
+
+          // searchResults = searchResults.filter((place) => {
+          //   !isIncludes(["locality", "sublocality", "country"], place.types);
+          // });
+
+          placeList.value = searchResults;
         }
       }
     });
