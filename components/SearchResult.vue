@@ -46,7 +46,7 @@ const sortedPlaces = computed(() => {
     </div>
   </div>
   <div
-    class="fixed bottom-0 py-2 w-full flex justify-center items-center gap-x-2 bg-white"
+    class="fixed bottom-0 left-0 py-2 w-full flex justify-center items-center gap-x-2 bg-white"
   >
     <div class="font-bold">
       <span class="text-2xl text-secondary">{{ props.places.length }}</span>
