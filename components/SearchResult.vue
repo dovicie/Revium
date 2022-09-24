@@ -23,7 +23,7 @@ const sortedPlaces = computed(() => {
         <img
           :src="place.photos[0].getUrl()"
           alt=""
-          class="aspect-[4/3] object-cover"
+          class="aspect-[4/3] object-cover rounded"
         />
       </div>
       <div class="flex items-center gap-x-2">
@@ -45,6 +45,7 @@ const sortedPlaces = computed(() => {
       </div>
     </div>
   </div>
+  <div class="h-16"></div>
   <div
     class="fixed bottom-0 left-0 py-2 w-full flex justify-center items-center gap-x-2 bg-white"
   >

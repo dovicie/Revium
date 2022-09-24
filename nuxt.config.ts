@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     // !!Nuxt3からheadになったので注意！！！
     htmlAttrs: {
       lang: "ja",
-      "data-theme": "cupcake", // テーマを選択
+      "data-theme": "mytheme", // テーマを選択
     },
     title: "Revium",
     meta: [
