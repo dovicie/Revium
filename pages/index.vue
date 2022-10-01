@@ -7,7 +7,7 @@ const ctx = useRuntimeConfig();
 
 const queryAddress = ref("");
 const queryKeyword = ref("");
-const queryRadius = ref(800);
+const queryRadius = ref(200);
 const queryIsOpen = ref(false);
 const queryGenres = ref([]);
 
