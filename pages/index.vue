@@ -12,6 +12,8 @@ const queryIsOpen = ref(false);
 const queryGenres = ref([]);
 
 const gmap = ref();
+const map2 = ref();
+const service2 = ref();
 
 const lat = ref(35.658106);
 const lng = ref(139.741364);
@@ -37,13 +39,14 @@ onMounted(() => {
   loader
     .load()
     .then((google) => {
-      const map = new google.maps.Map(gmap.value, {
+      map2.value = new google.maps.Map(gmap.value, {
         center: {
           lat: lat.value,
           lng: lng.value,
         },
         zoom: 14,
       });
+      service2.value = new google.maps.places.PlacesService(map2.value);
     })
     .catch((e) => {
       console.log(e);
@@ -72,7 +75,7 @@ const getPlaces = async () => {
 
   loader.load().then((google) => {
     const latLng = new google.maps.LatLng(lat.value, lng.value);
-    const map = new google.maps.Map(gmap.value, {
+    map2.value = new google.maps.Map(gmap.value, {
       center: {
         lat: lat.value,
         lng: lng.value,
@@ -89,8 +92,8 @@ const getPlaces = async () => {
     };
 
     let searchResults = new Array();
-    const service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, (results, status, pagination) => {
+    // service2.value = new google.maps.places.PlacesService(map2.value);
+    service2.value.nearbySearch(request, (results, status, pagination) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         searchResults = searchResults.concat(results);
         if (pagination.hasNextPage) {
@@ -106,6 +109,18 @@ const getPlaces = async () => {
     });
   });
   openSearchResult();
+};
+
+const getPlaceDetail = (placeId) => {
+  const request = {
+    placeId: "ChIJN1t_tDeuEmsRUsoyG83frY4",
+    // placeId: placeId,
+  };
+  service2.value.getDetails(request, (place, status) => {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      console.log(place);
+    }
+  });
 };
 </script>
 
