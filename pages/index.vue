@@ -66,8 +66,6 @@ const getLocation = (address) => {
   });
 };
 
-const isIncludes = (arr, target) => arr.some((el) => target.includes(el));
-
 const getPlaces = async () => {
   const location = await getLocation(queryAddress.value);
   lat.value = location.lat();
