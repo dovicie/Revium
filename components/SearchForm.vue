@@ -33,7 +33,7 @@ const keywordComputed = computed({
 const radiusComputed = computed({
   get: () => props.radius,
   set: (value) => {
-    emit("update:radius", value);
+    emit("update:radius", parseInt(value));
   },
 });
 const isOpenComputed = computed({

@@ -46,7 +46,7 @@ onMounted(() => {
       });
     })
     .catch((e) => {
-      // do something
+      console.log(e);
     });
 });
 
@@ -99,10 +99,6 @@ const getPlaces = async () => {
           searchResults = searchResults.filter(
             (place) => !place.types.includes("locality")
           );
-
-          // searchResults = searchResults.filter((place) => {
-          //   !isIncludes(["locality", "sublocality", "country"], place.types);
-          // });
 
           placeList.value = searchResults;
         }
