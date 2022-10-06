@@ -1,14 +1,13 @@
 root: true
 env:
-  browser: true
-  es2022: true
+    browser: true
+    es2022: true
 parserOptions:
-  ecmaVersion: 13
+    ecmaVersion: 13
 plugins:
-  - eslint-plugin-vue
+    - eslint-plugin-vue
 extends:
-  - eslint:recommended
-  - "plugin:vue/vue3-recommended"
-rules: {
-  vue/require-default-prop: 0
-}
+    - eslint:recommended
+    - 'plugin:vue/vue3-recommended'
+    - eslint-config-prettier
+rules: { vue/require-default-prop: 0 }
