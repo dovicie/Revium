@@ -4,7 +4,8 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview"
+    "preview": "nuxt preview",
+    "lint": "eslint --fix components/* && eslint --fix pages/*"
   },
   "devDependencies": {
     "@types/google.maps": "^3.50.0",
@@ -16,6 +17,8 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.14.3",
     "daisyui": "^2.22.0",
+    "eslint": "^8.24.0",
+    "eslint-plugin-vue": "^9.6.0",
     "vue3-google-map": "^0.13.2"
   }
 }
