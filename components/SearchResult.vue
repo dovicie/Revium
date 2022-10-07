@@ -8,10 +8,14 @@ const props = defineProps({
 
 defineEmits(['close']);
 
-const sortedPlaces = computed(() => {
-	return props.places.sort((a, b) => {
-		return b.user_ratings_total - a.user_ratings_total;
+const sortRatingTotal = (array) => {
+	return array.sort((a, b) => {
+		b.user_ratings_total - a.user_ratings_total;
 	});
+};
+
+const sortedPlaces = computed(() => {
+	return sortRatingTotal(props.places);
 });
 </script>
 

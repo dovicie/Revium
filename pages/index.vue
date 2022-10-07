@@ -1,9 +1,12 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import SearchForm from '~~/components/SearchForm.vue';
 import SearchResult from '~~/components/SearchResult.vue';
 import { Loader } from '@googlemaps/js-api-loader';
+import { useRuntimeConfig } from '#app';
+
 const ctx = useRuntimeConfig();
+const google = window.google;
 
 const queryAddress = ref('');
 const queryKeyword = ref('');
@@ -108,17 +111,19 @@ const getPlaces = async () => {
 	openSearchResult();
 };
 
-const getPlaceDetail = (placeId) => {
-	const request = {
-		placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4',
-		// placeId: placeId,
-	};
-	service.value.getDetails(request, (place, status) => {
-		if (status == google.maps.places.PlacesServiceStatus.OK) {
-			console.log(place);
-		}
-	});
-};
+//  ESLint no-unused-vars 回避
+
+// const getPlaceDetail = (placeId) => {
+// 	const request = {
+// 		// placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4',
+// 		placeId: placeId,
+// 	};
+// 	service.value.getDetails(request, (place, status) => {
+// 		if (status == google.maps.places.PlacesServiceStatus.OK) {
+// 			console.log(place);
+// 		}
+// 	});
+// };
 </script>
 
 <template>
@@ -129,12 +134,12 @@ const getPlaceDetail = (placeId) => {
 
 		<div v-if="!isVisibleSearchResult">
 			<SearchForm
-				@getPlaces="getPlaces"
 				v-model:address="queryAddress"
 				v-model:radius="queryRadius"
 				v-model:keyword="queryKeyword"
 				v-model:genres="queryGenres"
 				v-model:isOpen="queryIsOpen"
+				@getPlaces="getPlaces"
 			/>
 		</div>
 
