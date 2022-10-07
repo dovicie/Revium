@@ -7,11 +7,18 @@
 		"preview": "nuxt preview",
 		"lint": "eslint --fix components/* && eslint --fix pages/*",
 		"format": "prettier -w .",
-		"fix": "npm run format && npm run lint"
+		"fix": "npm run format && npm run lint",
+		"prepare": "husky install"
+	},
+	"lint-staged": {
+		"*.{vue,js,ts,json,yml,md}": "prettier -w",
+		"*.{js,ts,vue}": "eslint --fix"
 	},
 	"devDependencies": {
 		"@types/google.maps": "^3.50.0",
 		"autoprefixer": "^10.4.8",
+		"husky": "^8.0.1",
+		"lint-staged": "^13.0.3",
 		"nuxt": "3.0.0-rc.6",
 		"postcss": "^8.4.14",
 		"tailwindcss": "^3.1.8"
