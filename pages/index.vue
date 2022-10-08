@@ -6,7 +6,6 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { useRuntimeConfig } from '#app';
 
 const ctx = useRuntimeConfig();
-const google = window.google;
 
 const queryAddress = ref('');
 const queryKeyword = ref('');
@@ -58,13 +57,15 @@ onMounted(() => {
 
 const getLocation = (address) => {
 	return new Promise((resolve, reject) => {
-		const geocoder = new google.maps.Geocoder();
-		geocoder.geocode({ address: address }, (results, status) => {
-			if (status === 'OK') {
-				resolve(results[0].geometry.location);
-			} else {
-				reject(status);
-			}
+		loader.load().then((google) => {
+			const geocoder = new google.maps.Geocoder();
+			geocoder.geocode({ address: address }, (results, status) => {
+				if (status === 'OK') {
+					resolve(results[0].geometry.location);
+				} else {
+					reject(status);
+				}
+			});
 		});
 	});
 };
@@ -139,7 +140,7 @@ const getPlaces = async () => {
 				v-model:keyword="queryKeyword"
 				v-model:genres="queryGenres"
 				v-model:isOpen="queryIsOpen"
-				@getPlaces="getPlaces"
+				@get-places="getPlaces"
 			/>
 		</div>
 

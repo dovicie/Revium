@@ -8,11 +8,12 @@ plugins:
     - eslint-plugin-vue
 extends:
     - eslint:recommended
-    - plugin:vue/base
+    - plugin:vue/vue3-recommended
     - eslint-config-prettier
 rules:
     {
         vue/comment-directive: 0,
         vue/jsx-uses-vars: 0,
         vue/require-default-prop: 0,
+        vue/multi-word-component-names: [2, { 'ignores': ['index'] }],
     }
