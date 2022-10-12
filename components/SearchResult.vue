@@ -10,7 +10,7 @@ defineEmits(["close"]);
 
 const sortRatingTotal = (array) => {
   return array.sort((a, b) => {
-    b.user_ratings_total - a.user_ratings_total;
+    return b.user_ratings_total - a.user_ratings_total;
   });
 };
 
