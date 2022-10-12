@@ -1,19 +1,20 @@
 root: true
 env:
-    browser: true
-    es2022: true
+  browser: true
+  node: true
+  es2022: true
 parserOptions:
-    ecmaVersion: 13
+  ecmaVersion: 13
 plugins:
-    - eslint-plugin-vue
+  - eslint-plugin-vue
 extends:
-    - eslint:recommended
-    - plugin:vue/vue3-recommended
-    - eslint-config-prettier
+  - eslint:recommended
+  - plugin:vue/vue3-recommended
+  - eslint-config-prettier
 rules:
-    {
-        vue/comment-directive: 0,
-        vue/jsx-uses-vars: 0,
-        vue/require-default-prop: 0,
-        vue/multi-word-component-names: [2, { 'ignores': ['index'] }],
-    }
+  {
+    vue/comment-directive: 0,
+    vue/jsx-uses-vars: 0,
+    vue/require-default-prop: 0,
+    vue/multi-word-component-names: [2, { "ignores": ["index"] }],
+  }
