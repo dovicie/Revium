@@ -4,7 +4,6 @@ const props = defineProps({
   ratingsTotal: Number,
   rating: Number,
   name: String,
-  types: Array,
   placeId: String,
   getPlaceDetail: Function,
 });
@@ -33,11 +32,6 @@ const getDetail = (placeId) => {
     <p class="font-bold text-2xl">
       {{ props.name }}
     </p>
-    <div class="flex flex-wrap gap-2 text-xs">
-      <div v-for="typ in props.types" :key="typ">
-        <!-- {{ typ }} -->
-      </div>
-    </div>
     <button @click="getDetail(props.placeId)">もっと見る</button>
   </div>
 </template>

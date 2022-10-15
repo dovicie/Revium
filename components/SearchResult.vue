@@ -29,7 +29,6 @@ const sortedPlaces = computed(() => {
       :ratings-total="place.user_ratings_total"
       :rating="place.rating"
       :name="place.name"
-      :types="place.types"
       :place-id="place.place_id"
       :get-place-detail="props.getPlaceDetail"
     />
