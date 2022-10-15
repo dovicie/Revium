@@ -4,6 +4,7 @@ import { computed } from "vue";
 
 const props = defineProps({
   places: Array,
+  isVisibleLoading: Boolean,
   getPlaceDetail: Function,
 });
 
@@ -21,7 +22,13 @@ const sortedPlaces = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col flex-wrap gap-y-2">
+  <div
+    v-if="isVisibleLoading"
+    class="flex justify-center items-center h-[calc(100vh-400px)]"
+  >
+    <img src="assets/loading.svg" alt="" width="32" />
+  </div>
+  <div v-else class="flex flex-col flex-wrap gap-y-2">
     <SearchResultItem
       v-for="place in sortedPlaces"
       :key="place"
@@ -38,7 +45,9 @@ const sortedPlaces = computed(() => {
     class="fixed bottom-0 left-0 py-2 w-full flex justify-center items-center gap-x-2 bg-white"
   >
     <div class="font-bold">
-      <span class="text-2xl text-secondary">{{ props.places.length }}</span>
+      <span class="text-2xl text-secondary">{{
+        isVisibleLoading ? "--" : props.places.length
+      }}</span>
       件
     </div>
     <button class="btn btn-primary" @click="$emit('close')">

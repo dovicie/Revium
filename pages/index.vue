@@ -22,6 +22,7 @@ const lng = ref(139.741364);
 
 const placeList = ref([]);
 const isVisibleSearchResult = ref(false);
+const isVisibleLoading = ref(true);
 
 const openSearchResult = () => {
   isVisibleSearchResult.value = true;
@@ -29,6 +30,16 @@ const openSearchResult = () => {
 
 const closeSearchResult = () => {
   isVisibleSearchResult.value = false;
+};
+
+const showLoading = () => {
+  isVisibleLoading.value = true;
+};
+
+const removeLoading = () => {
+  return new Promise((resolve) => {
+    resolve((isVisibleLoading.value = false));
+  });
 };
 
 const loader = new Loader({
@@ -72,6 +83,10 @@ const getLocation = (address) => {
 
 // 新しい
 const onClickSearch = async () => {
+  // SearchResultを開く
+  showLoading();
+  openSearchResult();
+
   // 検索された場所の緯度経度取得
   const location = await getLocation(queryAddress.value);
   lat.value = location.lat();
@@ -79,9 +94,6 @@ const onClickSearch = async () => {
 
   // マップ更新
   map.value = await updateMap(location);
-
-  // SearchResultを開く
-  openSearchResult();
 
   // 場所の取得
   const request = {
@@ -91,7 +103,9 @@ const onClickSearch = async () => {
     keyword: queryKeyword.value,
     language: "ja",
   };
+
   placeList.value = await searchPlaces(request);
+  await removeLoading();
 };
 
 const updateMap = (latLng) => {
@@ -123,7 +137,7 @@ const searchPlaces = (request) => {
             resolve(searchResults);
           }
         } else {
-          reject(status);
+          reject(console.log(status));
         }
       });
     });
@@ -165,6 +179,7 @@ const getPlaceDetail = (placeId) => {
     <div v-else>
       <SearchResult
         :places="placeList"
+        :is-visible-loading="isVisibleLoading"
         :get-place-detail="getPlaceDetail"
         @close="closeSearchResult"
       />
