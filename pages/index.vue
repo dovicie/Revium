@@ -112,19 +112,19 @@ const getPlaces = async () => {
   openSearchResult();
 };
 
-//  ESLint no-unused-vars 回避
-
-// const getPlaceDetail = (placeId) => {
-// 	const request = {
-// 		// placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4',
-// 		placeId: placeId,
-// 	};
-// 	service.value.getDetails(request, (place, status) => {
-// 		if (status == google.maps.places.PlacesServiceStatus.OK) {
-// 			console.log(place);
-// 		}
-// 	});
-// };
+const getPlaceDetail = (placeId) => {
+  return new Promise((resolve, reject) => {
+    loader.load().then((google) => {
+      service.value.getDetails({ placeId: placeId }, (result, status) => {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          resolve(result);
+        } else {
+          reject(status);
+        }
+      });
+    });
+  });
+};
 </script>
 
 <template>
@@ -145,7 +145,11 @@ const getPlaces = async () => {
     </div>
 
     <div v-else>
-      <SearchResult :places="placeList" @close="closeSearchResult" />
+      <SearchResult
+        :places="placeList"
+        :get-place-detail="getPlaceDetail"
+        @close="closeSearchResult"
+      />
     </div>
   </div>
 </template>

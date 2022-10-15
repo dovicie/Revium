@@ -4,6 +4,7 @@ import { computed } from "vue";
 
 const props = defineProps({
   places: Array,
+  getPlaceDetail: Function,
 });
 
 defineEmits(["close"]);
@@ -29,6 +30,8 @@ const sortedPlaces = computed(() => {
       :rating="place.rating"
       :name="place.name"
       :types="place.types"
+      :place-id="place.place_id"
+      :get-place-detail="props.getPlaceDetail"
     />
   </div>
   <div class="h-16"></div>
