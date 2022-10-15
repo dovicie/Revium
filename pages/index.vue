@@ -70,46 +70,64 @@ const getLocation = (address) => {
   });
 };
 
-const getPlaces = async () => {
+// 新しい
+const onClickSearch = async () => {
+  // 検索された場所の緯度経度取得
   const location = await getLocation(queryAddress.value);
   lat.value = location.lat();
   lng.value = location.lng();
 
-  loader.load().then((google) => {
-    const latLng = new google.maps.LatLng(lat.value, lng.value);
-    map.value = new google.maps.Map(gmap.value, {
-      center: {
-        lat: lat.value,
-        lng: lng.value,
-      },
-      zoom: 14,
-    });
+  // マップ更新
+  map.value = await updateMap(location);
 
-    const request = {
-      location: latLng,
-      radius: queryRadius.value,
-      type: queryGenres.value,
-      keyword: queryKeyword.value,
-      language: "ja",
-    };
+  // SearchResultを開く
+  openSearchResult();
 
-    let searchResults = new Array();
-    service.value.nearbySearch(request, (results, status, pagination) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        searchResults = searchResults.concat(results);
-        if (pagination.hasNextPage) {
-          pagination.nextPage();
-        } else {
-          searchResults = searchResults.filter(
-            (place) => !place.types.includes("locality")
-          );
+  // 場所の取得
+  const request = {
+    location: location,
+    radius: queryRadius.value,
+    type: queryGenres.value,
+    keyword: queryKeyword.value,
+    language: "ja",
+  };
+  placeList.value = await searchPlaces(request);
+};
 
-          placeList.value = searchResults;
-        }
-      }
+const updateMap = (latLng) => {
+  return new Promise((resolve) => {
+    loader.load().then((google) => {
+      resolve(
+        new google.maps.Map(gmap.value, {
+          center: latLng,
+          zoom: 14,
+        })
+      );
     });
   });
-  openSearchResult();
+};
+
+const searchPlaces = (request) => {
+  let searchResults = new Array();
+  return new Promise((resolve, reject) => {
+    loader.load().then((google) => {
+      service.value.nearbySearch(request, (results, status, pagination) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          searchResults = searchResults.concat(results);
+          if (pagination.hasNextPage) {
+            pagination.nextPage();
+          } else {
+            searchResults = searchResults.filter(
+              (place) => !place.types.includes("locality")
+            );
+            resolve(searchResults);
+          }
+        } else {
+          reject(status);
+        }
+      });
+    });
+  });
 };
 
 const getPlaceDetail = (placeId) => {
@@ -140,7 +158,7 @@ const getPlaceDetail = (placeId) => {
         v-model:keyword="queryKeyword"
         v-model:genres="queryGenres"
         v-model:isOpen="queryIsOpen"
-        @get-places="getPlaces"
+        @on-click-search="onClickSearch"
       />
     </div>
 

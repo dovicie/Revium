@@ -10,7 +10,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
-  "getPlaces",
+  "onClickSearch",
   "update:address",
   "update:keyword",
   "update:radius",
@@ -82,7 +82,7 @@ const genreList = ref([
 </script>
 
 <template>
-  <form class="flex flex-col gap-y-4" @submit.prevent="$emit('getPlaces')">
+  <form class="flex flex-col gap-y-4" @submit.prevent="$emit('onClickSearch')">
     <div>
       <label class="h2">🗻 場所</label>
       <div class="flex flex-col sm:flex-row gap-y-2">
