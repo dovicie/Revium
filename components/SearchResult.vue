@@ -5,6 +5,8 @@ import { computed } from "vue";
 const props = defineProps({
   places: Array,
   isVisibleLoading: Boolean,
+  isExistLatlng: Boolean,
+  isEnptyHit: Boolean,
   getPlaceDetail: Function,
 });
 
@@ -23,10 +25,24 @@ const sortedPlaces = computed(() => {
 
 <template>
   <div
-    v-if="isVisibleLoading"
+    v-if="props.isVisibleLoading"
     class="flex justify-center items-center h-[calc(100vh-400px)]"
   >
     <img src="assets/loading.svg" alt="" width="32" />
+  </div>
+  <div
+    v-else-if="!props.isExistLatlng"
+    class="flex flex-col justify-center items-center h-[calc(100vh-400px)]"
+  >
+    <p class="font-bold">場所が見つかりません🙇‍♂️</p>
+  </div>
+  <div
+    v-else-if="props.isEnptyHit"
+    class="flex flex-col justify-center items-center h-[calc(100vh-400px)]"
+  >
+    <p class="font-bold">
+      検索結果が<span class="text-2xl text-secondary px-1">0</span>件です🙇‍♂️
+    </p>
   </div>
   <div v-else class="flex flex-col flex-wrap gap-y-2">
     <SearchResultItem
@@ -46,7 +62,7 @@ const sortedPlaces = computed(() => {
   >
     <div class="font-bold">
       <span class="text-2xl text-secondary">{{
-        isVisibleLoading ? "--" : props.places.length
+        props.isVisibleLoading ? "--" : props.places.length
       }}</span>
       件
     </div>

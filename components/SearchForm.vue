@@ -84,13 +84,14 @@ const genreList = ref([
 <template>
   <form class="flex flex-col gap-y-4" @submit.prevent="$emit('onClickSearch')">
     <div>
-      <label class="h2">🗻 場所</label>
+      <label class="h2">🗻 場所<span class="text-xs">（必須）</span></label>
       <div class="flex flex-col sm:flex-row gap-y-2">
         <input
           v-model="addressComputed"
           type="text"
           placeholder="新宿駅"
           class="input input-bordered input-sm grow"
+          required
         />
         <div class="flex flex-row items-center justify-end gap-1">
           <p class="shrink-0">から</p>

@@ -23,6 +23,8 @@ const lng = ref(139.741364);
 const placeList = ref([]);
 const isVisibleSearchResult = ref(false);
 const isVisibleLoading = ref(true);
+const isEnptyHit = ref(false);
+const isExistLatlng = ref(true);
 
 const openSearchResult = () => {
   isVisibleSearchResult.value = true;
@@ -67,14 +69,18 @@ onMounted(() => {
 });
 
 const getLocation = (address) => {
+  isExistLatlng.value = true;
   return new Promise((resolve, reject) => {
     loader.load().then((google) => {
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ address: address }, (results, status) => {
         if (status === "OK") {
           resolve(results[0].geometry.location);
+        } else if (status === "ZERO_RESULTS") {
+          isExistLatlng.value = false;
+          resolve(new google.maps.LatLng(999, 999));
         } else {
-          reject(status);
+          reject(console.log(status));
         }
       });
     });
@@ -123,6 +129,7 @@ const updateMap = (latLng) => {
 
 const searchPlaces = (request) => {
   let searchResults = new Array();
+  isEnptyHit.value = false;
   return new Promise((resolve, reject) => {
     loader.load().then((google) => {
       service.value.nearbySearch(request, (results, status, pagination) => {
@@ -136,6 +143,11 @@ const searchPlaces = (request) => {
             );
             resolve(searchResults);
           }
+        } else if (
+          status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS
+        ) {
+          isEnptyHit.value = true;
+          resolve(searchResults);
         } else {
           reject(console.log(status));
         }
@@ -180,6 +192,8 @@ const getPlaceDetail = (placeId) => {
       <SearchResult
         :places="placeList"
         :is-visible-loading="isVisibleLoading"
+        :is-exist-latlng="isExistLatlng"
+        :is-enpty-hit="isEnptyHit"
         :get-place-detail="getPlaceDetail"
         @close="closeSearchResult"
       />
