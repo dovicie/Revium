@@ -15,16 +15,7 @@ const detail = reactive({
   webSiteUrl: "",
   openingHours: {
     openNow: false,
-    weekdayText: {
-      0: "",
-      1: "",
-      2: "",
-      3: "",
-      4: "",
-      5: "",
-      6: "",
-      7: "",
-    },
+    weekdayText: [],
   },
   phoneNumber: "",
   photos: [""],
@@ -32,13 +23,22 @@ const detail = reactive({
 });
 
 const isVisibleDetail = ref(false);
+const isVisibleOpeningHoursWeeklyText = ref(false);
 
 const onClickDetail = async (placeId) => {
   isVisibleDetail.value = true;
+  console.log(detail);
   const fetchedDetail = await props.getPlaceDetail(placeId);
   detail.gmapUrl = fetchedDetail.url;
   detail.webSiteUrl = fetchedDetail.website;
-  detail.openingHours = fetchedDetail.opening_hours;
+  detail.openingHours = {
+    openNow: fetchedDetail.opening_hours
+      ? fetchedDetail.opening_hours.isOpen()
+      : false,
+    weekdayText: fetchedDetail.opening_hours
+      ? fetchedDetail.opening_hours.weekday_text
+      : [],
+  };
   detail.phoneNumber = fetchedDetail.formatted_phone_number;
   detail.photos = fetchedDetail.photos;
   detail.reviews = fetchedDetail.reviews;
@@ -46,6 +46,11 @@ const onClickDetail = async (placeId) => {
 
 const onclickCloseDetail = () => {
   isVisibleDetail.value = false;
+};
+
+const toggleWeeklyText = () => {
+  isVisibleOpeningHoursWeeklyText.value =
+    !isVisibleOpeningHoursWeeklyText.value;
 };
 </script>
 
@@ -106,11 +111,42 @@ const onclickCloseDetail = () => {
             >
           </div>
         </div>
-        <div class="flex items-center gap-x-4">
+        <div
+          v-if="detail.openingHours.weekdayText[0]"
+          class="flex items-center gap-x-4"
+        >
           <img src="assets/icon-watch.png" alt="" class="w-5" />
-          <div class="text-base text-success-content">営業中</div>
-          <img src="assets/icon-down-arrow.svg" alt="" class="w-4" />
+          <button
+            v-if="detail.openingHours.openNow"
+            class="flex items-center gap-x-2"
+            @click="toggleWeeklyText()"
+          >
+            <div class="text-base text-success-content">営業中</div>
+            <img
+              :src="
+                isVisibleOpeningHoursWeeklyText
+                  ? 'assets/icon-up-arrow.svg'
+                  : 'assets/icon-down-arrow.svg'
+              "
+              alt=""
+              class="w-4"
+            />
+          </button>
+          <div v-else class="flex items-center gap-x-2 text-error text-base">
+            営業時間外
+          </div>
         </div>
+        <ul
+          v-if="isVisibleOpeningHoursWeeklyText"
+          class="ml-9 text-sm overflow-auto whitespace-nowrap flex flex-col gap-y-0.5"
+        >
+          <li
+            v-for="(text, index) in detail.openingHours.weekdayText"
+            :key="index"
+          >
+            {{ text }}
+          </li>
+        </ul>
         <div v-if="detail.phoneNumber" class="flex items-center gap-x-4">
           <img src="assets/icon-phone.png" alt="" class="w-5" />
           <div class="text-base">
