@@ -27,7 +27,6 @@ const isVisibleOpeningHoursWeeklyText = ref(false);
 
 const onClickDetail = async (placeId) => {
   isVisibleDetail.value = true;
-  console.log(detail);
   const fetchedDetail = await props.getPlaceDetail(placeId);
   detail.gmapUrl = fetchedDetail.url;
   detail.webSiteUrl = fetchedDetail.website;
