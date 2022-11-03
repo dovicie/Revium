@@ -68,10 +68,15 @@ const onclickCloseDetail = () => {
     <p class="font-bold text-2xl">
       {{ props.name }}
     </p>
-    <div v-if="!isVisibleDetail">
-      <button @click="onClickDetail(props.placeId)">もっと見る ⬇</button>
-    </div>
-    <div v-else>
+    <button
+      v-if="!isVisibleDetail"
+      class="flex items-center gap-x-2 m-auto"
+      @click="onClickDetail(props.placeId)"
+    >
+      <div>もっと見る</div>
+      <img src="assets/icon-down-arrow.svg" alt="" class="w-4" />
+    </button>
+    <div v-else class="flex flex-col gap-y-2">
       <div class="border-t-2 border-base-100"></div>
       <div class="flex flex-col gap-y-2">
         <div class="flex items-center gap-x-4">
@@ -149,7 +154,13 @@ const onclickCloseDetail = () => {
           </div>
         </div>
       </div>
-      <button @click="onclickCloseDetail()">閉じる ⬆</button>
+      <button
+        class="flex items-center gap-x-2 mx-auto mt-2"
+        @click="onclickCloseDetail()"
+      >
+        <div>閉じる</div>
+        <img src="assets/icon-up-arrow.svg" alt="" class="w-4" />
+      </button>
     </div>
   </div>
 </template>
