@@ -36,12 +36,14 @@ const isVisibleDetail = ref(false);
 const onClickDetail = async (placeId) => {
   isVisibleDetail.value = true;
   const fetchedDetail = await props.getPlaceDetail(placeId);
+  console.log(fetchedDetail);
   detail.gmapUrl = fetchedDetail.url;
   detail.webSiteUrl = fetchedDetail.website;
   detail.openingHours = fetchedDetail.opening_hours;
   detail.phoneNumber = fetchedDetail.formatted_phone_number;
   detail.photos = fetchedDetail.photos;
   detail.reviews = fetchedDetail.reviews;
+  console.log(detail);
 };
 
 const onclickCloseDetail = () => {
@@ -128,7 +130,7 @@ const onclickCloseDetail = () => {
           class="carousel-item w-[120px] mr-2"
         >
           <img
-            :src="photo.getUrl()"
+            :src="photo ? photo.getUrl() : ''"
             alt=""
             class="aspect-[4/3] object-cover rounded"
           />
