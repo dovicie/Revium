@@ -10,7 +10,7 @@ const ctx = useRuntimeConfig();
 const queryAddress = ref("");
 const queryKeyword = ref("");
 const queryRadius = ref(200);
-const queryIsOpen = ref(false);
+// const queryIsOpen = ref(false);
 const queryGenres = ref([]);
 
 const gmap = ref();
@@ -183,7 +183,6 @@ const getPlaceDetail = (placeId) => {
         v-model:radius="queryRadius"
         v-model:keyword="queryKeyword"
         v-model:genres="queryGenres"
-        v-model:isOpen="queryIsOpen"
         @on-click-search="onClickSearch"
       />
     </div>

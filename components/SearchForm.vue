@@ -5,7 +5,6 @@ const props = defineProps({
   address: String,
   keyword: String,
   radius: Number,
-  isOpen: Boolean,
   genres: Array,
 });
 
@@ -14,7 +13,6 @@ const emit = defineEmits([
   "update:address",
   "update:keyword",
   "update:radius",
-  "update:isOpen",
   "update:genres",
 ]);
 
@@ -34,12 +32,6 @@ const radiusComputed = computed({
   get: () => props.radius,
   set: (value) => {
     emit("update:radius", parseInt(value));
-  },
-});
-const isOpenComputed = computed({
-  get: () => props.isOpen,
-  set: (value) => {
-    emit("update:isOpen", value);
   },
 });
 const genresComputed = computed({
@@ -136,12 +128,6 @@ const genreList = ref([
           }}</label>
         </div>
       </div>
-    </div>
-    <div class="form-control">
-      <label class="label cursor-pointer justify-center gap-2">
-        <input v-model="isOpenComputed" type="checkbox" class="checkbox" />
-        <span class="label-text font-bold">営業中のスポットのみを表示</span>
-      </label>
     </div>
     <button class="btn btn-secondary" type="submit">🔎 この条件で探す</button>
   </form>
