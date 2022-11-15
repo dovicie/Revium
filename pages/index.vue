@@ -10,7 +10,6 @@ const ctx = useRuntimeConfig();
 const queryAddress = ref("");
 const queryKeyword = ref("");
 const queryRadius = ref(200);
-// const queryIsOpen = ref(false);
 const queryGenres = ref([]);
 
 const gmap = ref();
@@ -87,7 +86,6 @@ const getLocation = (address) => {
   });
 };
 
-// 新しい
 const onClickSearch = async () => {
   // SearchResultを開く
   showLoading();
@@ -172,7 +170,7 @@ const getPlaceDetail = (placeId) => {
 </script>
 
 <template>
-  <div class="p-2 flex flex-col gap-y-4">
+  <div class="p-2 flex flex-col gap-y-4 max-w-md w-full mx-auto">
     <div>
       <div ref="gmap" class="h-[240px] w-full"></div>
     </div>
