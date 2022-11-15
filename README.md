@@ -1,42 +1,15 @@
-# Nuxt 3 Minimal Starter
+# Revium
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+Revium can find locations based on GoogleMap user ratings total.
 
-## Setup
+## Description
 
-Make sure to install the dependencies:
+The application is more focused on the number of reviews than on the rating.
 
-```bash
-# yarn
-yarn install
+Wouldn't you rather go to a restaurant with a rating of 3.5 but 100 reviews than to a restaurant with a rating of 4.5 but only 10 reviews?
 
-# npm
-npm install
+So, unlike GoogleMap, this application can search for places in order of the number of reviews gathered.
 
-# pnpm
-pnpm install --shamefully-hoist
-```
+## URL
 
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/guide/deploy/presets) for more information.
+https://revium.netlify.app/
