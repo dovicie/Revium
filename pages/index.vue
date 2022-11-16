@@ -9,7 +9,7 @@ const ctx = useRuntimeConfig();
 
 const queryAddress = ref("");
 const queryKeyword = ref("");
-const queryRadius = ref(200);
+const queryRadius = ref(800);
 const queryGenres = ref([]);
 
 const gmap = ref();

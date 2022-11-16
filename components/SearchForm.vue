@@ -77,7 +77,7 @@ const genreList = ref([
   <form class="flex flex-col gap-y-4" @submit.prevent="$emit('onClickSearch')">
     <div>
       <label class="h2">🗻 場所<span class="text-xs">（必須）</span></label>
-      <div class="flex flex-col sm:flex-row gap-y-2">
+      <div class="flex flex-col gap-y-2">
         <input
           v-model="addressComputed"
           type="text"
@@ -91,13 +91,13 @@ const genreList = ref([
             v-model="radiusComputed"
             class="select select-bordered select-sm"
           >
-            <option value="200">200m</option>
-            <option value="500">500m</option>
-            <option value="800">800m</option>
-            <option value="1000">1km</option>
-            <option value="3000">3km</option>
-            <option value="5000">5km</option>
-            <option value="10000">10km</option>
+            <option value="800">800m（徒歩10分）</option>
+            <option value="200">200m（徒歩2分）</option>
+            <option value="500">500m（徒歩6分）</option>
+            <option value="1000">1km（徒歩12分）</option>
+            <option value="3000">3km（自動車5分）</option>
+            <option value="5000">5km（自動車8分）</option>
+            <option value="10000">10km（自動車15分）</option>
           </select>
           <p class="shrink-0">圏内</p>
         </div>
