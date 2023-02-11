@@ -44,6 +44,10 @@ const removeLoading = () => {
   });
 };
 
+const setGenzaichiToQueryAddress = () => {
+  queryAddress.value = "現在地";
+};
+
 const loader = new Loader({
   apiKey: ctx.apiKey,
   version: "weekly",
@@ -220,6 +224,7 @@ const getPlaceDetail = (placeId) => {
         v-model:radius="queryRadius"
         v-model:keyword="queryKeyword"
         v-model:genres="queryGenres"
+        @set-genzaichi-to-query-address="setGenzaichiToQueryAddress"
         @on-click-search="onClickSearch"
       />
     </div>

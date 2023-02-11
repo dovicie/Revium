@@ -9,6 +9,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
+  "setGenzaichiToQueryAddress",
   "onClickSearch",
   "update:address",
   "update:keyword",
@@ -86,7 +87,11 @@ const genreList = ref([
           required
         />
         <div class="flex flex-row items-center justify-end gap-1">
-          <button class="btn btn-outline btn-primary btn-sm" type="button">
+          <button
+            class="btn btn-outline btn-primary btn-sm"
+            type="button"
+            @click="$emit('setGenzaichiToQueryAddress')"
+          >
             📍現在地
           </button>
           <select
