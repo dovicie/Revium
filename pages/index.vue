@@ -23,6 +23,7 @@ const placeList = ref([]);
 const isVisibleSearchResult = ref(false);
 const isVisibleLoading = ref(true);
 const isEnptyHit = ref(false);
+const isSucceedGetCurrentLocation = ref(true);
 const isExistLatlng = ref(true);
 
 const openSearchResult = () => {
@@ -68,9 +69,10 @@ onMounted(() => {
 });
 
 const getLatlng = (address) => {
+  isSucceedGetCurrentLocation.value = true;
   isExistLatlng.value = true;
   if (address === "現在地") {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           resolve({
@@ -79,7 +81,12 @@ const getLatlng = (address) => {
           });
         },
         (error) => {
-          reject(console.error(error));
+          isSucceedGetCurrentLocation.value = false;
+          console.log(error);
+          resolve({
+            lat: 999,
+            lng: 999,
+          });
         }
       );
     });
@@ -95,7 +102,10 @@ const getLatlng = (address) => {
             });
           } else if (status === "ZERO_RESULTS") {
             isExistLatlng.value = false;
-            resolve(new google.maps.LatLng(999, 999));
+            resolve({
+              lat: 999,
+              lng: 999,
+            });
           } else {
             reject(console.log(status));
           }
@@ -218,6 +228,7 @@ const getPlaceDetail = (placeId) => {
       <SearchResult
         :places="placeList"
         :is-visible-loading="isVisibleLoading"
+        :is-succeed-get-current-location="isSucceedGetCurrentLocation"
         :is-exist-latlng="isExistLatlng"
         :is-enpty-hit="isEnptyHit"
         :get-place-detail="getPlaceDetail"

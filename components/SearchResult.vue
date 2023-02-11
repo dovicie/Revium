@@ -5,6 +5,7 @@ import { computed } from "vue";
 const props = defineProps({
   places: Array,
   isVisibleLoading: Boolean,
+  isSucceedGetCurrentLocation: Boolean,
   isExistLatlng: Boolean,
   isEnptyHit: Boolean,
   getPlaceDetail: Function,
@@ -29,6 +30,12 @@ const sortedPlaces = computed(() => {
     class="flex justify-center items-center h-[calc(100vh-400px)]"
   >
     <img src="assets/loading.svg" alt="" width="32" />
+  </div>
+  <div
+    v-else-if="!props.isSucceedGetCurrentLocation"
+    class="flex flex-col justify-center items-center h-[calc(100vh-400px)]"
+  >
+    <p class="font-bold">現在地が取得できませんでした🙇‍♂️</p>
   </div>
   <div
     v-else-if="!props.isExistLatlng"
