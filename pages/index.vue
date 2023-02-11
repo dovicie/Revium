@@ -89,7 +89,6 @@ const getLatlng = (address) => {
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address: address }, (results, status) => {
           if (status === "OK") {
-            // resolve(results[0].geometry.location);
             resolve({
               lat: results[0].geometry.location.lat(),
               lng: results[0].geometry.location.lng(),
