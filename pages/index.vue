@@ -67,23 +67,43 @@ onMounted(() => {
     });
 });
 
-const getLocation = (address) => {
+const getLatlng = (address) => {
   isExistLatlng.value = true;
-  return new Promise((resolve, reject) => {
-    loader.load().then((google) => {
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ address: address }, (results, status) => {
-        if (status === "OK") {
-          resolve(results[0].geometry.location);
-        } else if (status === "ZERO_RESULTS") {
-          isExistLatlng.value = false;
-          resolve(new google.maps.LatLng(999, 999));
-        } else {
-          reject(console.log(status));
+  if (address === "現在地") {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          reject(console.error(error));
         }
+      );
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      loader.load().then((google) => {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: address }, (results, status) => {
+          if (status === "OK") {
+            // resolve(results[0].geometry.location);
+            resolve({
+              lat: results[0].geometry.location.lat(),
+              lng: results[0].geometry.location.lng(),
+            });
+          } else if (status === "ZERO_RESULTS") {
+            isExistLatlng.value = false;
+            resolve(new google.maps.LatLng(999, 999));
+          } else {
+            reject(console.log(status));
+          }
+        });
       });
     });
-  });
+  }
 };
 
 const onClickSearch = async () => {
@@ -92,9 +112,19 @@ const onClickSearch = async () => {
   openSearchResult();
 
   // 検索された場所の緯度経度取得
-  const location = await getLocation(queryAddress.value);
-  lat.value = location.lat();
-  lng.value = location.lng();
+  const latlng = await getLatlng(queryAddress.value);
+  lat.value = latlng.lat;
+  lng.value = latlng.lng;
+
+  // google.maps.LatLngクラスのインスタンス
+  const location = await loader
+    .load()
+    .then((google) => {
+      return new google.maps.LatLng(lat.value, lng.value);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 
   // マップ更新
   map.value = await updateMap(location);
