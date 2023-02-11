@@ -23,6 +23,7 @@ const placeList = ref([]);
 const isVisibleSearchResult = ref(false);
 const isVisibleLoading = ref(true);
 const isEnptyHit = ref(false);
+const isSucceedGetCurrentLocation = ref(true);
 const isExistLatlng = ref(true);
 
 const openSearchResult = () => {
@@ -41,6 +42,10 @@ const removeLoading = () => {
   return new Promise((resolve) => {
     resolve((isVisibleLoading.value = false));
   });
+};
+
+const setGenzaichiToQueryAddress = () => {
+  queryAddress.value = "現在地";
 };
 
 const loader = new Loader({
@@ -67,23 +72,51 @@ onMounted(() => {
     });
 });
 
-const getLocation = (address) => {
+const getLatlng = (address) => {
+  isSucceedGetCurrentLocation.value = true;
   isExistLatlng.value = true;
-  return new Promise((resolve, reject) => {
-    loader.load().then((google) => {
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ address: address }, (results, status) => {
-        if (status === "OK") {
-          resolve(results[0].geometry.location);
-        } else if (status === "ZERO_RESULTS") {
-          isExistLatlng.value = false;
-          resolve(new google.maps.LatLng(999, 999));
-        } else {
-          reject(console.log(status));
+  if (address === "現在地") {
+    return new Promise((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          isSucceedGetCurrentLocation.value = false;
+          console.log(error);
+          resolve({
+            lat: 999,
+            lng: 999,
+          });
         }
+      );
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      loader.load().then((google) => {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: address }, (results, status) => {
+          if (status === "OK") {
+            resolve({
+              lat: results[0].geometry.location.lat(),
+              lng: results[0].geometry.location.lng(),
+            });
+          } else if (status === "ZERO_RESULTS") {
+            isExistLatlng.value = false;
+            resolve({
+              lat: 999,
+              lng: 999,
+            });
+          } else {
+            reject(console.log(status));
+          }
+        });
       });
     });
-  });
+  }
 };
 
 const onClickSearch = async () => {
@@ -92,9 +125,19 @@ const onClickSearch = async () => {
   openSearchResult();
 
   // 検索された場所の緯度経度取得
-  const location = await getLocation(queryAddress.value);
-  lat.value = location.lat();
-  lng.value = location.lng();
+  const latlng = await getLatlng(queryAddress.value);
+  lat.value = latlng.lat;
+  lng.value = latlng.lng;
+
+  // google.maps.LatLngクラスのインスタンス
+  const location = await loader
+    .load()
+    .then((google) => {
+      return new google.maps.LatLng(lat.value, lng.value);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 
   // マップ更新
   map.value = await updateMap(location);
@@ -181,6 +224,7 @@ const getPlaceDetail = (placeId) => {
         v-model:radius="queryRadius"
         v-model:keyword="queryKeyword"
         v-model:genres="queryGenres"
+        @set-genzaichi-to-query-address="setGenzaichiToQueryAddress"
         @on-click-search="onClickSearch"
       />
     </div>
@@ -189,6 +233,7 @@ const getPlaceDetail = (placeId) => {
       <SearchResult
         :places="placeList"
         :is-visible-loading="isVisibleLoading"
+        :is-succeed-get-current-location="isSucceedGetCurrentLocation"
         :is-exist-latlng="isExistLatlng"
         :is-enpty-hit="isEnptyHit"
         :get-place-detail="getPlaceDetail"

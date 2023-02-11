@@ -9,6 +9,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
+  "setGenzaichiToQueryAddress",
   "onClickSearch",
   "update:address",
   "update:keyword",
@@ -86,7 +87,13 @@ const genreList = ref([
           required
         />
         <div class="flex flex-row items-center justify-end gap-1">
-          <p class="shrink-0">から</p>
+          <button
+            class="btn btn-outline btn-primary btn-sm"
+            type="button"
+            @click="$emit('setGenzaichiToQueryAddress')"
+          >
+            現在地からはこちら
+          </button>
           <select
             v-model="radiusComputed"
             class="select select-bordered select-sm"
@@ -99,7 +106,6 @@ const genreList = ref([
             <option value="5000">5km（自動車8分）</option>
             <option value="10000">10km（自動車15分）</option>
           </select>
-          <p class="shrink-0">圏内</p>
         </div>
       </div>
     </div>
