@@ -92,7 +92,7 @@ const genreList = ref([
             type="button"
             @click="$emit('setGenzaichiToQueryAddress')"
           >
-            📍現在地
+            現在地からはこちら
           </button>
           <select
             v-model="radiusComputed"
