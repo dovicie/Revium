@@ -1,7 +1,7 @@
 <template>
   <header class="p-2 bg-white">
     <div class="flex justify-between items-center max-w-md w-full mx-auto">
-      <h1><img src="assets/logo.svg" alt="Revium" class="h-9" /></h1>
+      <h1><img src="assets/logo.svg" alt="Revium" class="h-6" /></h1>
       <div class="dropdown dropdown-end">
         <label tabindex="0" class="btn btn-ghost m-1">三</label>
         <ul
