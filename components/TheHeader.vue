@@ -1,17 +1,7 @@
 <template>
-  <header class="p-2 bg-white">
+  <header class="px-2 py-3 bg-white">
     <div class="flex justify-between items-center max-w-md w-full mx-auto">
-      <h1><img src="assets/logo.svg" alt="Revium" class="h-9" /></h1>
-      <div class="dropdown dropdown-end">
-        <label tabindex="0" class="btn btn-ghost m-1">三</label>
-        <ul
-          tabindex="0"
-          class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-        >
-          <li><a>ホーム</a></li>
-          <li><a>このアプリについて</a></li>
-        </ul>
-      </div>
+      <h1><img src="assets/logo.svg" alt="Revium" class="h-8" /></h1>
     </div>
   </header>
 </template>
